@@ -1,0 +1,24 @@
+{
+  "name": "mybot",
+  "version": "1.0.0",
+  "description": "Discord reminder bot",
+  "main": "main.js",
+  "scripts": {
+    "main": "main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OndrejBednar/DiscordReminderBot.git"
+  },
+  "author": "mester2",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OndrejBednar/DiscordReminderBot/issues"
+  },
+  "homepage": "https://github.com/OndrejBednar/DiscordReminderBot#readme",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0"
+  }
+}
