@@ -4,7 +4,8 @@
   "description": "Discord reminder bot",
   "main": "main.js",
   "scripts": {
-    "main": "main.js"
+    "main": "main.js",
+    "dev": "node main.js"
   },
   "repository": {
     "type": "git",
