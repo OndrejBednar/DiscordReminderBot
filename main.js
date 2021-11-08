@@ -64,9 +64,9 @@ client.on('messageCreate', msg => {
     if (global.subscribedChannels.indexOf(msg.channelId) == -1) return;
     const args = msg.content.split(/ +/);
     const command = args.shift().toLowerCase();
+    
+    
     if (!client.ChatCommands.has(command)) return;
-
-
     console.info(`Called command: ${command}`);
     console.log(args);
     console.log(msg);
@@ -108,7 +108,12 @@ async function checkDates() {
             today.getHours() == reminder.date.getHours() &&
             today.getMinutes() == reminder.date.getMinutes()) 
         {
-            client.guilds.cache.find(g => g.id == '667343859197411340').channels.cache.find(channel => channel.id == reminderChannel).send(`<@!${reminder.owner}> its time for ${reminder.name}`);
+            if (reminder.group != null) {
+                client.guilds.cache.find(g => g.id == '667343859197411340').channels.cache.find(channel => channel.id == reminderChannel).send(`<@!${reminder.owner}> has set reminder for <@&${reminder.group}> group, its time for **${reminder.name}**`);
+            }
+            else{
+                client.guilds.cache.find(g => g.id == '667343859197411340').channels.cache.find(channel => channel.id == reminderChannel).send(`<@!${reminder.owner}> its time for **${reminder.name}**`);
+            }
             let index = global.reminders.indexOf(reminder);
             global.reminders.splice(index, 1);
         }

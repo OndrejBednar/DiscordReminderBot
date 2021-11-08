@@ -35,51 +35,76 @@ module.exports = {
             name: "year",
             description: "sets the year",
             type: Discord.Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: "role",
+            description: "role which u want to tag",
+            type: Discord.Constants.ApplicationCommandOptionTypes.ROLE
         }
     ],
     execute(interaction, options) {
         let date;
-        let numbers = [
+        let data = [
             options.getNumber('hour'),
             options.getNumber('minute'),
             options.getNumber('day'),
             options.getNumber('month'),
-            options.getNumber('year')
+            options.getNumber('year'),
+            options.getRole('role')
         ];
 
-        console.log(numbers);
-
         try {
-            if (numbers[4] == null || numbers[3] == null) {
-                date = new Date();
-                date.toUTCString()
-                date.setHours(numbers[0]);
-                if (numbers[1] != null) {
-                    date.setMinutes(numbers[1]);
-                }
-                else { date.setMinutes(0) }
-                if (numbers[2] != null) {
-                    date.setDate(numbers[2]);
-                }
+            date = new Date();
+            if (data[4] != null) {
+                date.setUTCFullYear(data[4])
+            }
+            if (data[3] != null) {
+                date.setUTCMonth(data[3] - 1)
+            }
+            date.setHours(data[0]);
+            if (data[1] != null) {
+                date.setMinutes(data[1]);
+            }
+            else { date.setMinutes(0) }
+            if (data[2] != null) {
+                date.setDate(data[2]);
+            }
 
+            if (date <= new Date()) {
+                interaction.reply({
+                    content: `You can't set a reminder for the past`,
+                    ephemeral: true,
+                })
+                return;
+            }
+
+            if (data[5] != null) {
+                global.reminders.push({
+                    name: options.getString('description'),
+                    owner: interaction.user.id,
+                    date: date,
+                    group: data[5].id
+                });    
+            }
+            else {
                 global.reminders.push({
                     name: options.getString('description'),
                     owner: interaction.user.id,
                     date: date
                 });
-
-                interaction.reply({
-                    content: `Your reminder was successfuly set for ${new Intl.DateTimeFormat('cs', { dateStyle: 'full', timeStyle: 'short' }).format(date)}`,
-                    ephemeral: true,
-                })
-
-                console.log(global.reminders);
-                console.log(date.getHours());
-                console.log(date.getDay());
             }
+
+            console.log(`${interaction.user.username} has set a new reminder for ${new Intl.DateTimeFormat('cs', { dateStyle: 'full', timeStyle: 'short' }).format(date)}`);
+            interaction.reply({
+                content: `Your reminder was successfuly set for ${new Intl.DateTimeFormat('cs', { dateStyle: 'full', timeStyle: 'short' }).format(date)}`,
+                ephemeral: true,
+            })
+
+
         } catch (error) {
             interaction.reply({
-                content: 'Something went wrong',
+                content: 'Something went wrong with setting your reminder' +
+                `error: ${error}`,
                 ephemeral: true,
 
             })
