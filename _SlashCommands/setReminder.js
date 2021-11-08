@@ -94,6 +94,7 @@ module.exports = {
                 });
             }
 
+            console.log(global.reminders);
             console.log(`${interaction.user.username} has set a new reminder for ${new Intl.DateTimeFormat('cs', { dateStyle: 'full', timeStyle: 'short' }).format(date)}`);
             interaction.reply({
                 content: `Your reminder was successfuly set for ${new Intl.DateTimeFormat('cs', { dateStyle: 'full', timeStyle: 'short' }).format(date)}`,

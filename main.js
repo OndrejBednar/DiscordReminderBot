@@ -108,6 +108,7 @@ async function checkDates() {
             today.getHours() == reminder.date.getHours() &&
             today.getMinutes() == reminder.date.getMinutes()) 
         {
+            console.log(reminder);
             if (reminder.group != null) {
                 client.guilds.cache.find(g => g.id == '667343859197411340').channels.cache.find(channel => channel.id == reminderChannel).send(`<@!${reminder.owner}> has set reminder for <@&${reminder.group}> group, its time for **${reminder.name}**`);
             }
