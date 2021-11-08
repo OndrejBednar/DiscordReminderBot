@@ -1,7 +1,7 @@
 const Discord = require("discord.js"); //import discord.js
 
 module.exports = {
-    name: 'reminder',
+    name: "reminder",
     description: 'sets a reminder',
     options: [
         {
@@ -38,7 +38,6 @@ module.exports = {
         }
     ],
     execute(interaction, options) {
-        let today = new Date();
         let date;
         let numbers = [
             options.getNumber('hour'),
@@ -47,38 +46,42 @@ module.exports = {
             options.getNumber('month'),
             options.getNumber('year')
         ];
-        
+
         console.log(numbers);
 
-        if(numbers[4] == null || numbers[3] == null) {
-            date = new Date();
-            date.setHours(numbers[0]);
-            if (numbers[1] != null) {
-                date.setMinutes(numbers[1]);
-            }
-            else { date.setMinutes(0)}
-            if (numbers[2] != null) {
-                date.setDate(numbers[2]);
-            }
+        try {
+            if (numbers[4] == null || numbers[3] == null) {
+                date = new Date();
+                date.toUTCString()
+                date.setHours(numbers[0]);
+                if (numbers[1] != null) {
+                    date.setMinutes(numbers[1]);
+                }
+                else { date.setMinutes(0) }
+                if (numbers[2] != null) {
+                    date.setDate(numbers[2]);
+                }
 
-            global.reminders.push({
-                name: options.getString('description'),
-                owner: interaction.user.id,
-                date: date
-            });
+                global.reminders.push({
+                    name: options.getString('description'),
+                    owner: interaction.user.id,
+                    date: date
+                });
 
-            interaction.reply({
-                content: `Your reminder was successfuly set for ${date.getDay() + "." + date.getMonth() + " " + date.getHours() + ":" + date.getMinutes()}`,
-                ephemeral: true,
-            })
-            console.log(global.reminders);
-            console.log(date.getHours());
-            console.log(date.getDay());
-        }
-        else {
+                interaction.reply({
+                    content: `Your reminder was successfuly set for ${new Intl.DateTimeFormat('cs', { dateStyle: 'full', timeStyle: 'short' }).format(date)}`,
+                    ephemeral: true,
+                })
+
+                console.log(global.reminders);
+                console.log(date.getHours());
+                console.log(date.getDay());
+            }
+        } catch (error) {
             interaction.reply({
                 content: 'Something went wrong',
                 ephemeral: true,
+
             })
         }
     },

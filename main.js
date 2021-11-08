@@ -3,6 +3,7 @@ const Discord = require("discord.js"); //import discord.js
 
 
 global.subscribedChannels = [];
+global.reminderChannel;
 global.reminders = [];
 const client = new Discord.Client({
     intents:
@@ -56,7 +57,6 @@ client.on('ready', () => {
     let promise1 = new Promise((resolve) => {
         setInterval(() => checkDates(), 1000);
     });
-    console.log("ss");
 })
 
 client.on('messageCreate', msg => {
@@ -106,8 +106,9 @@ async function checkDates() {
         if (today.getMonth() == reminder.date.getMonth() &&
             today.getDate() == reminder.date.getDate() &&
             today.getHours() == reminder.date.getHours() &&
-            today.getMinutes() == reminder.date.getMinutes()) {
-            client.guilds.cache.find(g => g.id == '667343859197411340').channels.cache.find(channel => channel.isText()).send(`<@!${reminder.owner}> its time for ${reminder.name}`);
+            today.getMinutes() == reminder.date.getMinutes()) 
+        {
+            client.guilds.cache.find(g => g.id == '667343859197411340').channels.cache.find(channel => channel.id == reminderChannel).send(`<@!${reminder.owner}> its time for ${reminder.name}`);
             let index = global.reminders.indexOf(reminder);
             global.reminders.splice(index, 1);
         }
